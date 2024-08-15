@@ -2,10 +2,10 @@ from django.urls import include, path
 from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
                                    SpectacularSwaggerView)
 from rest_framework.routers import DefaultRouter
+from django.contrib import admin
 
 from api.v1.views.course_view import CourseViewSet, GroupViewSet, LessonViewSet
 from api.v1.views.user_view import UserViewSet
-
 v1_router = DefaultRouter()
 v1_router.register('users', UserViewSet, basename='users')
 v1_router.register('courses', CourseViewSet, basename='courses')
@@ -22,6 +22,9 @@ urlpatterns = [
     path("auth/", include('djoser.urls.authtoken')),
     # Создание нового пользователя api/v1/auth/users/
     # Авторизация пользователя     api/v1/auth/token/login/
+    path("admin/", admin.site.urls),
+    path('courses/<int:pk>/pay/',CourseViewSet.as_view({'post': 'pay'})),
+
 ]
 
 urlpatterns += [

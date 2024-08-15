@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Avg, Count
 from rest_framework import serializers
 
+from api.v1.serializers.user_serializer import UserDetailSerializer
 from courses.models import Course, Group, Lesson
 from users.models import Subscription
 
@@ -20,6 +21,12 @@ class LessonSerializer(serializers.ModelSerializer):
             'link',
             'course'
         )
+
+
+class CourseDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('title',)
 
 
 class CreateLessonSerializer(serializers.ModelSerializer):
@@ -47,12 +54,12 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    """Список групп."""
-
-    # TODO Доп. задание
+    course = CourseDetailSerializer(read_only=True)
+    students = UserDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Group
+        fields = '__all__'
 
 
 class CreateGroupSerializer(serializers.ModelSerializer):
@@ -61,7 +68,6 @@ class CreateGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = (
-            'title',
             'course',
         )
 
@@ -81,13 +87,14 @@ class CourseSerializer(serializers.ModelSerializer):
 
     lessons = MiniLessonSerializer(many=True, read_only=True)
     lessons_count = serializers.SerializerMethodField(read_only=True)
-    students_count = serializers.SerializerMethodField(read_only=True)
-    groups_filled_percent = serializers.SerializerMethodField(read_only=True)
-    demand_course_percent = serializers.SerializerMethodField(read_only=True)
+
+    # students_count = serializers.SerializerMethodField(read_only=True)
+    # groups_filled_percent = serializers.SerializerMethodField(read_only=True)
+    # demand_course_percent = serializers.SerializerMethodField(read_only=True)
 
     def get_lessons_count(self, obj):
         """Количество уроков в курсе."""
-        # TODO Доп. задание
+        return obj.lessons.count()
 
     def get_students_count(self, obj):
         """Общее количество студентов на курсе."""
@@ -111,9 +118,9 @@ class CourseSerializer(serializers.ModelSerializer):
             'price',
             'lessons_count',
             'lessons',
-            'demand_course_percent',
-            'students_count',
-            'groups_filled_percent',
+            # 'demand_course_percent',
+            # 'students_count',
+            # 'groups_filled_percent',
         )
 
 
@@ -122,3 +129,4 @@ class CreateCourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
+        fields = '__all__'

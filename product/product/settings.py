@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'api.apps.ApiConfig',
+    'courses.apps.CoursesConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,9 +43,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'api.apps.ApiConfig',
-    'courses.apps.CoursesConfig',
-    'users.apps.UsersConfig',
     'drf_spectacular',
 ]
 

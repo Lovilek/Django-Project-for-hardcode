@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets, permissions
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
-from api.v1.permissions import IsStudentOrIsAdmin, ReadOnlyOrIsAdmin
+from api.v1.permissions import IsStudentOrIsAdmin, ReadOnlyOrIsAdmin, make_payment
 from api.v1.serializers.course_serializer import (CourseSerializer,
                                                   CreateCourseSerializer,
                                                   CreateGroupSerializer,
@@ -31,6 +32,8 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         course = get_object_or_404(Course, id=self.kwargs.get('course_id'))
+        if not course.has_access(self.request.user):
+            raise PermissionDenied("У вас нет доступа к этому курсу.")
         return course.lessons.all()
 
 
@@ -64,6 +67,12 @@ class CourseViewSet(viewsets.ModelViewSet):
             return CourseSerializer
         return CreateCourseSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Course.objects.all()
+        return Course.objects.filter(price__lte=user.balance.balance)
+
     @action(
         methods=['post'],
         detail=True,
@@ -72,7 +81,9 @@ class CourseViewSet(viewsets.ModelViewSet):
     def pay(self, request, pk):
         """Покупка доступа к курсу (подписка на курс)."""
 
-        # TODO
+        subscription = make_payment(request)
+
+        data = SubscriptionSerializer(subscription).data
 
         return Response(
             data=data,

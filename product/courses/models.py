@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import Subscription
 
 
 class Course(models.Model):
@@ -17,8 +18,9 @@ class Course(models.Model):
         auto_now_add=False,
         verbose_name='Дата и время начала курса'
     )
-
-    # TODO
+    price = models.IntegerField(
+        verbose_name='Стоймость'
+    )
 
     class Meta:
         verbose_name = 'Курс'
@@ -27,6 +29,9 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+    def has_access(self, user):
+        return Subscription.objects.filter(user=user, course=self).exists()
 
 
 class Lesson(models.Model):
@@ -40,8 +45,12 @@ class Lesson(models.Model):
         max_length=250,
         verbose_name='Ссылка',
     )
-
-    # TODO
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        verbose_name='Курс',
+        related_name='lessons'
+    )
 
     class Meta:
         verbose_name = 'Урок'
@@ -54,10 +63,21 @@ class Lesson(models.Model):
 
 class Group(models.Model):
     """Модель группы."""
-
-    # TODO
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        verbose_name='Курс',
+        related_name='groups'
+    )
+    students = models.ManyToManyField(
+        'users.CustomUser',
+        verbose_name='Студенты'
+    )
 
     class Meta:
         verbose_name = 'Группа'
         verbose_name_plural = 'Группы'
         ordering = ('-id',)
+
+    def __str__(self):
+        return f'Группа курса {self.course.title}'

@@ -1,3 +1,14 @@
 from django.contrib import admin
 
-# Register your models here.
+from courses.models import Course, Lesson, Group
+
+admin.site.register(Course)
+admin.site.register(Lesson)
+
+
+class GroupAdmin(admin.ModelAdmin):
+    list_display = ('course',)
+    filter_horizontal = ('students',)
+
+
+admin.site.register(Group, GroupAdmin)
