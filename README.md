@@ -1,24 +1,55 @@
 
 # Тестовое задание Django/Backend
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![DjangoREST](https://img.shields.io/badge/DJANGO-REST-ff1709?style=for-the-badge&logo=django&logoColor=white&color=ff1709&labelColor=gray) ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+Построение архитектуры выполнил, вот скриншот бд
+Так же можете посмотреть структуру в models.py 
+![image](https://github.com/user-attachments/assets/cb61e381-7926-46a8-b662-a651edcbf2dd)
 
-Проект представляет собой площадку для размещения онлайн-курсов с набором уроков. Доступ к урокам предоставляется после покупки курса (подписки). Внутри курса студенты автоматически распределяются по группам.
+Функционал выполнил следующим образом:
+Админ панель - http://127.0.0.1:8000/api/v1/admin    Email: admin@gmail.com   Password: admin123
 
-Перед тем, как приступить к выполнению задания, советуем изучить документацию, которая поможет в выполнении заданий:
+Для не авторизованного пользователя доступно только создание нового и авторизация
+http://127.0.0.1:8000/api/v1/auth/token/login
+http://127.0.0.1:8000/api/v1/auth/users/
 
-1. https://docs.djangoproject.com/en/4.2/intro/tutorial01/
-2. https://docs.djangoproject.com/en/4.2/topics/db/models/
-3. https://docs.djangoproject.com/en/4.2/topics/db/queries/
-4. https://docs.djangoproject.com/en/4.2/ref/models/querysets/
-5. https://docs.djangoproject.com/en/4.2/topics/signals/
-6. https://www.django-rest-framework.org/tutorial/quickstart/
-7. https://www.django-rest-framework.org/api-guide/viewsets/
-8. https://www.django-rest-framework.org/api-guide/serializers/
+После регистрации пользователя в ручную добавлял Balance в админ панели
 
-# Построение системы для обучения
+http://127.0.0.1:8000/api/v1/courses/ - Вывод всех курсов, показывает курсы только в том случае если хватает баланса на его покупку и выводит в таком формате
+![image](https://github.com/user-attachments/assets/28fca362-d3c8-4ac5-a53a-9e83af57fe7f)
 
-Суть задания заключается в проверке знаний построения связей в БД и умении правильно строить запросы без ошибок N+1.
+
+
+
+http://127.0.0.1:8000/api/v1/courses/<course_id>/pay/  -  покупка подписки, доступно если пользователь предоставил токен и id курса и у него хватает денег на покупку, после покупки пользователю присваивается подписка и группа 
+![image](https://github.com/user-attachments/assets/152df3a6-2bea-4db4-90ad-80790303143c)
+![image](https://github.com/user-attachments/assets/a0107b51-6fae-4f34-9eee-2f4d60ab6cd1)
+
+
+http://127.0.0.1:8000/api/v1/courses/1/lessons/ - Если у пользователя есть подписка на курс, то он получает доступ к урокам  
+![image](https://github.com/user-attachments/assets/fe3e79d7-4481-4fb0-94ba-cba2b822335d)
+Если нет подпсики то 
+![image](https://github.com/user-attachments/assets/1d51310f-fad4-4299-a983-8440eb413afd)
+
+
+http://127.0.0.1:8000/api/v1/courses/<course_id>/groups/ -  Предоставляя id курса выводит группу с названием курса и студентами в ней
+![image](https://github.com/user-attachments/assets/20fbf4fa-a197-4ae2-91cc-f9660e76ccc5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Построение архитектуры(5 баллов)
 
@@ -43,16 +74,10 @@
 1. Выполненная архитектура на базе данных SQLite с использованием Django.
 2. Реализованные API на базе готовой архитектуры.
 
-### Мы ожидаем:
-
-Ссылка на публичный репозиторий в GitHub с выполненным проектом.
-
-** Нельзя форкать репозиторий. Используйте git clone. **
 
 
 
-## Если вы все сделали, но хотите еще, то можете реализовать API для отображения статистики по продуктам. 
-Необходимо отобразить список всех продуктов на платформе, к каждому продукту приложить информацию:
+
 
 1. Количество учеников занимающихся на продукте.
 2. На сколько % заполнены группы? (среднее значение по количеству участников в группах от максимального значения участников в группе, где максимальное = 30).
@@ -64,13 +89,11 @@
 ## __Установка на локальном компьютере__
 1. Клонируйте репозиторий:
     ```
-    git clone git@github.com:hqcamp/test-backend-3.git
+    git clone https://github.com/Lovilek/Django-Project-for-hardcode.git
     ```
 2. Установите и активируйте виртуальное окружение:
     ```
-    python -m venv venv
-    source venv/Scripts/activate  - для Windows
-    source venv/bin/activate - для Linux
+    venv/Scripts/activate  - для Windows
     ```
 3. Установите зависимости:
     ```
@@ -80,6 +103,7 @@
 4. Перейдите в папку product и выполните миграции:
     ```
     cd product
+    python manage.py makemigrations
     python manage.py migrate
     ```
 5. Создайте суперпользователя:
@@ -96,151 +120,7 @@
 * ReDoc: http://127.0.0.1:8000/api/v1/redoc/
 
 
-## Доп. задание
-### __Реализуйте следующее API__
 
-<details><summary> GET: http://127.0.0.1:8000/api/v1/courses/  - показать список всех курсов.</summary>
-
-    200 OK:
-    ```
-    [
-        {
-            "id": 3,
-            "author": "Михаил Потапов",
-            "title": "Backend developer",
-            "start_date": "2024-03-03T12:00:00Z",
-            "price": "150000",
-            "lessons_count": 0,
-            "lessons": [],
-            "demand_course_percent": 0,
-            "students_count": 0,
-            "groups_filled_percent": 0
-        },
-        {
-            "id": 2,
-            "author": "Михаил Потапов",
-            "title": "Python developer",
-            "start_date": "2024-03-03T12:00:00Z",
-            "price": "120000",
-            "lessons_count": 3,
-            "lessons": [
-                {
-                    "title": "Урок №1"
-                },
-                {
-                    "title": "Урок №2"
-                },
-                {
-                    "title": "Урок №3"
-                }
-            ],
-            "demand_course_percent": 84,
-            "students_count": 10,
-            "groups_filled_percent": 83
-        },
-        {
-            "id": 1,
-            "author": "Иван Петров",
-            "title": "Онлайн курс",
-            "start_date": "2024-03-03T12:00:00Z",
-            "price": "56000",
-            "lessons_count": 3,
-            "lessons": [
-                {
-                    "title": "Урок №1"
-                },
-                {
-                    "title": "Урок №2"
-                },
-                {
-                    "title": "Урок №3"
-                }
-            ],
-            "demand_course_percent": 7,
-            "students_count": 1,
-            "groups_filled_percent": 10
-        }
-    ]
-    ```
-</details>
-
-
-<details><summary> GET: http://127.0.0.1:8000/api/v1/courses/2/groups/  - показать список групп определенного курса.</summary> 
-
-    200 OK:
-    ```
-    [
-        {
-            "title": "Группа №3",
-            "course": "Python developer",
-            "students": [
-                {
-                    "first_name": "Иван",
-                    "last_name": "Грозный",
-                    "email": "user9@user.com"
-                },
-                {
-                    "first_name": "Корней",
-                    "last_name": "Чуковский",
-                    "email": "user8@user.com"
-                },
-                {
-                    "first_name": "Максим",
-                    "last_name": "Горький",
-                    "email": "user7@user.com"
-                }
-            ]
-        },
-        {
-            "title": "Группа №2",
-            "course": "Python developer",
-            "students": [
-                {
-                    "first_name": "Ольга",
-                    "last_name": "Иванова",
-                    "email": "user6@user.com"
-                },
-                {
-                    "first_name": "Саша",
-                    "last_name": "Иванов",
-                    "email": "user5@user.com"
-                },
-                {
-                    "first_name": "Дмитрий",
-                    "last_name": "Иванов",
-                    "email": "user4@user.com"
-                }
-            ]
-        },
-        {
-            "title": "Группа №1",
-            "course": "Python developer",
-            "students": [
-                {
-                    "first_name": "Андрей",
-                    "last_name": "Петров",
-                    "email": "user10@user.com"
-                },
-                {
-                    "first_name": "Олег",
-                    "last_name": "Петров",
-                    "email": "user3@user.com"
-                },
-                {
-                    "first_name": "Сергей",
-                    "last_name": "Петров",
-                    "email": "user2@user.com"
-                },
-                {
-                    "first_name": "Иван",
-                    "last_name": "Петров",
-                    "email": "user@user.com"
-                }
-            ]
-        }
-    ]
-    ```
-</details>
 
 ### __Технологии__
 * [Python 3.10.12](https://www.python.org/doc/)
