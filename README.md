@@ -3,6 +3,7 @@
 
 Построение архитектуры выполнил, вот скриншот бд
 Так же можете посмотреть структуру в models.py 
+
 ![image](https://github.com/user-attachments/assets/cb61e381-7926-46a8-b662-a651edcbf2dd)
 
 Функционал выполнил следующим образом:
@@ -15,23 +16,36 @@ http://127.0.0.1:8000/api/v1/auth/users/
 После регистрации пользователя в ручную добавлял Balance в админ панели
 
 http://127.0.0.1:8000/api/v1/courses/ - Вывод всех курсов, показывает курсы только в том случае если хватает баланса на его покупку и выводит в таком формате
+
+
+
 ![image](https://github.com/user-attachments/assets/28fca362-d3c8-4ac5-a53a-9e83af57fe7f)
 
 
 
 
 http://127.0.0.1:8000/api/v1/courses/<course_id>/pay/  -  покупка подписки, доступно если пользователь предоставил токен и id курса и у него хватает денег на покупку, после покупки пользователю присваивается подписка и группа 
+
+
 ![image](https://github.com/user-attachments/assets/152df3a6-2bea-4db4-90ad-80790303143c)
 ![image](https://github.com/user-attachments/assets/a0107b51-6fae-4f34-9eee-2f4d60ab6cd1)
 
 
 http://127.0.0.1:8000/api/v1/courses/1/lessons/ - Если у пользователя есть подписка на курс, то он получает доступ к урокам  
+
+
 ![image](https://github.com/user-attachments/assets/fe3e79d7-4481-4fb0-94ba-cba2b822335d)
+
+
 Если нет подпсики то 
+
+
 ![image](https://github.com/user-attachments/assets/1d51310f-fad4-4299-a983-8440eb413afd)
 
 
 http://127.0.0.1:8000/api/v1/courses/<course_id>/groups/ -  Предоставляя id курса выводит группу с названием курса и студентами в ней
+
+
 ![image](https://github.com/user-attachments/assets/20fbf4fa-a197-4ae2-91cc-f9660e76ccc5)
 
 
