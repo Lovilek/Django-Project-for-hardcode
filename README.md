@@ -7,7 +7,7 @@
 ![image](https://github.com/user-attachments/assets/cb61e381-7926-46a8-b662-a651edcbf2dd)
 
 Функционал выполнил следующим образом:
-Админ панель - http://127.0.0.1:8000/api/v1/admin    Email: admin@gmail.com   Password: admin123
+Админ панель - http://127.0.0.1:8000/api/v1/admin   
 
 Для не авторизованного пользователя доступно только создание нового и авторизация
 http://127.0.0.1:8000/api/v1/auth/token/login
